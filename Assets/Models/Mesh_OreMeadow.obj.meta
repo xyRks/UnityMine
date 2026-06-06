@@ -1,0 +1,7 @@
+﻿fileFormatVersion: 2
+guid: dddddddd000000000000000000000006
+ModelImporter:
+  serializedVersion: 22
+  defaultClipFrameRate: 24
+  rollConvLimit: 0.05
+  anomalyLimit: 0.25
