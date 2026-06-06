@@ -28,11 +28,22 @@ public class CraftingBench : MonoBehaviour
             playerInventory.stone -= stoneCost;
             // Добавляем готовый предмет в инвентарь
             playerInventory.items.Add(itemName);
-            Debug.Log("Вы скрафтили " + itemName.ToLower() + "!");
+
+            // Выводим сообщение с правильным русским окончанием
+            if (itemName == "Кирка") Debug.Log("Вы скрафтили кирку!");
+            else if (itemName == "Топор") Debug.Log("Вы скрафтили топор!");
+            else if (itemName == "Меч") Debug.Log("Вы скрафтили меч!");
+            else if (itemName == "Лук") Debug.Log("Вы скрафтили лук!");
+            else Debug.Log("Вы скрафтили " + itemName.ToLower() + "!");
         }
         else
         {
-            Debug.Log("Не хватает ресурсов для " + itemName.ToLower() + "!");
+            // Выводим сообщение об ошибке с правильным русским окончанием
+            if (itemName == "Кирка") Debug.Log("Не хватает ресурсов для кирки!");
+            else if (itemName == "Топор") Debug.Log("Не хватает ресурсов для топора!");
+            else if (itemName == "Меч") Debug.Log("Не хватает ресурсов для меча!");
+            else if (itemName == "Лук") Debug.Log("Не хватает ресурсов для лука!");
+            else Debug.Log("Не хватает ресурсов для " + itemName.ToLower() + "!");
         }
     }
 
