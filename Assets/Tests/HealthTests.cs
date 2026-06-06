@@ -3,58 +3,72 @@ using UnityEngine;
 
 public class HealthTests
 {
-    private GameObject testObject;
-    private Health healthComponent;
+    private GameObject? testObject;
+    private Health? healthComponent;
 
     [SetUp]
-    public void Setup()
+    public void SetUp()
     {
-        testObject = new GameObject("TestObject");
+        testObject = new GameObject();
         healthComponent = testObject.AddComponent<Health>();
-        // Инициализируем начальные значения для тестов
+
+        // Start initializes maxHealth and currentHealth
+        // Simulate Start method behavior for initialization:
         healthComponent.maxHealth = 100;
-        healthComponent.currentHealth = 50;
+        healthComponent.currentHealth = 100;
     }
 
     [TearDown]
-    public void Teardown()
+    public void TearDown()
     {
-        UnityEngine.Object.DestroyImmediate(testObject);
+        if (testObject != null)
+        {
+            UnityEngine.Object.DestroyImmediate(testObject);
+        }
     }
 
     [Test]
-    public void Heal_DoesNotExceedMaxHealth()
+    public void TakeDamage_NegativeDamage_DoesNotChangeHealth()
     {
-        // Act: лечим на значение, которое превысит maxHealth (50 + 60 = 110)
-        healthComponent.Heal(60);
+        // Arrange
+        int initialHealth = 100;
+        healthComponent!.maxHealth = initialHealth;
+        healthComponent.currentHealth = initialHealth;
 
-        // Assert: текущее здоровье не должно превышать максимальное
-        Assert.That(healthComponent.currentHealth, Is.EqualTo(100), "Здоровье не должно превышать максимальное значение при лечении.");
+        // Act
+        healthComponent.TakeDamage(-10);
+
+        // Assert
+        Assert.AreEqual(initialHealth, healthComponent.currentHealth, "Negative damage should not reduce health.");
     }
 
     [Test]
-    public void Heal_IncreasesHealthCorrectly()
+    public void TakeDamage_PositiveDamage_ReducesHealth()
     {
-        // Act: лечим на значение в пределах максимума (50 + 20 = 70)
-        healthComponent.Heal(20);
+        // Arrange
+        int initialHealth = 100;
+        healthComponent!.maxHealth = initialHealth;
+        healthComponent.currentHealth = initialHealth;
+
+        // Act
+        healthComponent.TakeDamage(20);
 
         // Assert
-        Assert.That(healthComponent.currentHealth, Is.EqualTo(70), "Здоровье должно корректно увеличиваться при лечении.");
+        Assert.AreEqual(80, healthComponent.currentHealth, "Positive damage should reduce health.");
     }
 
     [Test]
-    public void Heal_NegativeOrZeroAmount_DoesNothing()
+    public void TakeDamage_MoreDamageThanCurrentHealth_SetsHealthToZero()
     {
-        // Act: пытаемся вылечить отрицательным значением
-        healthComponent.Heal(-10);
+        // Arrange
+        int initialHealth = 100;
+        healthComponent!.maxHealth = initialHealth;
+        healthComponent.currentHealth = initialHealth;
+
+        // Act
+        healthComponent.TakeDamage(150);
 
         // Assert
-        Assert.That(healthComponent.currentHealth, Is.EqualTo(50), "Отрицательное лечение не должно изменять здоровье.");
-
-        // Act: пытаемся вылечить нулевым значением
-        healthComponent.Heal(0);
-
-        // Assert
-        Assert.That(healthComponent.currentHealth, Is.EqualTo(50), "Нулевое лечение не должно изменять здоровье.");
+        Assert.AreEqual(0, healthComponent.currentHealth, "Damage exceeding current health should set health to 0.");
     }
 }
