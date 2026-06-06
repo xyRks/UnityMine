@@ -1,4 +1,6 @@
 using UnityEngine;
+
+feature/task-03-health-system-16197770412816063994
 using UnityEngine.Events;
 
 /// <summary>
@@ -61,11 +63,25 @@ public class Health : MonoBehaviour
         OnHealthChanged?.Invoke(currentHealth, maxHealth);
 
         if (currentHealth == 0)
+=======
+
+// Простой компонент здоровья для игрока
+public class Health : MonoBehaviour
+{
+    public int currentHealth = 100;
+
+    // Метод для получения урона
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+        if (currentHealth <= 0)
+main
         {
             Die();
         }
     }
 
+feature/task-03-health-system-16197770412816063994
     /// <summary>
     /// Метод для лечения
     /// </summary>
@@ -90,5 +106,12 @@ public class Health : MonoBehaviour
     {
         isDead = true;
         OnDeath?.Invoke();
+=======
+    // Метод смерти
+    private void Die()
+    {
+        // Логика уничтожения объекта (можно расширить позже)
+        Destroy(gameObject);
+main
     }
 }
