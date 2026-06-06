@@ -55,20 +55,16 @@ public class PlayerAction : MonoBehaviour
             // Проверяем, какой у нас инструмент
             if (currentTool == ToolType.Pickaxe || currentTool == ToolType.Axe)
             {
-                // Ищем компонент Resource на объекте, в который попали
-                Resource resource = hit.collider.GetComponent<Resource>();
-                if (resource != null)
+                if (hit.collider.CompareTag("Resource"))
                 {
-                    resource.TakeDamage(toolDamage);
+                    hit.collider.SendMessage("TakeDamage", toolDamage, SendMessageOptions.DontRequireReceiver);
                 }
             }
             else if (currentTool == ToolType.Sword || currentTool == ToolType.Bow)
             {
-                // Ищем компонент Enemy на объекте, в который попали
-                Enemy enemy = hit.collider.GetComponent<Enemy>();
-                if (enemy != null)
+                if (hit.collider.CompareTag("Enemy"))
                 {
-                    enemy.TakeDamage(toolDamage);
+                    hit.collider.SendMessage("TakeDamage", toolDamage, SendMessageOptions.DontRequireReceiver);
                 }
             }
         }

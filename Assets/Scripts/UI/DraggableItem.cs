@@ -11,6 +11,11 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     [HideInInspector]
     public Transform parentAfterDrag; // Родитель, куда вернется предмет после перетаскивания
 
+    public void SetNewParent(Transform newParent)
+    {
+        parentAfterDrag = newParent;
+    }
+
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
 

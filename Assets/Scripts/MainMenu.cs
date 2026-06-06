@@ -15,26 +15,26 @@ public class MainMenu : MonoBehaviour
     public AudioClip mineSound;
     public AudioClip hitSound;
     public AudioSource audioSource;
+    public GameObject mainMenuPanel;
+    public GameObject settingsPanel;
 
     // Метод для продолжения игры
     public void Continue()
     {
-        Debug.Log("Продолжение игры...");
-        // Здесь можно добавить код для скрытия меню или загрузки сцены
+        if (mainMenuPanel != null) mainMenuPanel.SetActive(false);
     }
 
     // Метод для сохранения игры
     public void Save()
     {
-        Debug.Log("Сохранение игры...");
-        // Здесь будет код сохранения (например, через PlayerPrefs)
+        PlayerPrefs.SetInt("SavedGame", 1);
+        PlayerPrefs.Save();
     }
 
     // Метод для открытия настроек
     public void Settings()
     {
-        Debug.Log("Открытие настроек...");
-        // Здесь код для активации панели настроек
+        if (settingsPanel != null) settingsPanel.SetActive(true);
     }
 
     // Метод для выхода из игры

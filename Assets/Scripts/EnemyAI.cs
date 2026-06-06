@@ -61,13 +61,7 @@ public class EnemyAI : MonoBehaviour
             // Обновляем время следующей возможной атаки
             nextAttackTime = Time.time + attackCooldown;
 
-            // Пытаемся найти компонент Health у игрока
-            Health playerHealth = player.GetComponent<Health>();
-            if (playerHealth != null)
-            {
-                // Наносим урон игроку
-                playerHealth.TakeDamage(damage);
-            }
+            player.SendMessage("TakeDamage", damage, SendMessageOptions.DontRequireReceiver);
         }
     }
 }

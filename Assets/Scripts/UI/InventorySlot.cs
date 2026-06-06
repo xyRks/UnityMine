@@ -9,15 +9,7 @@ public class InventorySlot : MonoBehaviour, IDropHandler
         // Проверяем, есть ли в этом слоте уже предмет (дети)
         if (transform.childCount == 0)
         {
-            // Пытаемся получить компонент перетаскиваемого предмета
-            DraggableItem draggableItem = eventData.pointerDrag.GetComponent<DraggableItem>();
-
-            // Если мы действительно перетащили предмет
-            if (draggableItem != null)
-            {
-                // Устанавливаем этому предмету нового родителя - этот слот
-                draggableItem.parentAfterDrag = transform;
-            }
+            eventData.pointerDrag.SendMessage("SetNewParent", transform, SendMessageOptions.DontRequireReceiver);
         }
     }
 }
