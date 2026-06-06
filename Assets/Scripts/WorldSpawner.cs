@@ -26,6 +26,9 @@ public class WorldSpawner : MonoBehaviour
 
     private void SpawnWorldObjects()
     {
+        // Кэшируем Terrain.activeTerrain перед циклом для повышения производительности
+        Terrain currentTerrain = Terrain.activeTerrain;
+
         for (int i = 0; i < numberOfObjectsToSpawn; i++)
         {
             // Случайный выбор биома (0 - лес, 1 - поляна)
@@ -42,11 +45,11 @@ public class WorldSpawner : MonoBehaviour
                 float x = Random.Range(-spawnAreaWidth / 2f, spawnAreaWidth / 2f);
                 float z = Random.Range(-spawnAreaLength / 2f, spawnAreaLength / 2f);
 
-                // Определение высоты Y с помощью Terrain.activeTerrain
+                // Определение высоты Y с помощью закэшированного террейна
                 float y = 0f;
-                if (Terrain.activeTerrain != null)
+                if (currentTerrain != null)
                 {
-                    y = Terrain.activeTerrain.SampleHeight(new Vector3(x, 0, z));
+                    y = currentTerrain.SampleHeight(new Vector3(x, 0, z));
                 }
 
                 Vector3 spawnPosition = new Vector3(x, y, z);
