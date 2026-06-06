@@ -60,7 +60,7 @@ public class Health : MonoBehaviour
 
         OnHealthChanged?.Invoke(currentHealth, maxHealth);
 
-        if (currentHealth <= 0)
+        if (currentHealth == 0)
         {
             Die();
         }
@@ -91,7 +91,7 @@ public class Health : MonoBehaviour
         isDead = true;
         OnDeath?.Invoke();
 
-        // Логика уничтожения объекта (можно расширить позже)
+        // Логика уничтожения объекта
         Destroy(gameObject);
     }
 }
