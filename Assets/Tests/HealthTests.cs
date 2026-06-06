@@ -1,74 +1,68 @@
 using NUnit.Framework;
 using UnityEngine;
 
-public class HealthTests
+namespace Tests
 {
-    private GameObject? testObject;
-    private Health? healthComponent;
-
-    [SetUp]
-    public void SetUp()
+    public class HealthTests
     {
-        testObject = new GameObject();
-        healthComponent = testObject.AddComponent<Health>();
+        private GameObject _healthGameObject;
+        private Health _health;
 
-        // Start initializes maxHealth and currentHealth
-        // Simulate Start method behavior for initialization:
-        healthComponent.maxHealth = 100;
-        healthComponent.currentHealth = 100;
-    }
-
-    [TearDown]
-    public void TearDown()
-    {
-        if (testObject != null)
+        [SetUp]
+        public void Setup()
         {
-            UnityEngine.Object.DestroyImmediate(testObject);
+            _healthGameObject = new GameObject();
+            _health = _healthGameObject.AddComponent<Health>();
+            _health.maxHealth = 100;
+            _health.currentHealth = 100;
         }
-    }
 
-    [Test]
-    public void TakeDamage_NegativeDamage_DoesNotChangeHealth()
-    {
-        // Arrange
-        int initialHealth = 100;
-        healthComponent!.maxHealth = initialHealth;
-        healthComponent.currentHealth = initialHealth;
+        [TearDown]
+        public void Teardown()
+        {
+            UnityEngine.Object.DestroyImmediate(_healthGameObject);
+        }
 
-        // Act
-        healthComponent.TakeDamage(-10);
+        [Test]
+        public void TakeDamage_WithFatalDamage_SetsHealthToZeroAndFiresOnDeath()
+        {
+            // Arrange
+            _health.currentHealth = 100;
+            bool onDeathFired = false;
+            _health.OnDeath.AddListener(() => onDeathFired = true);
 
-        // Assert
-        Assert.AreEqual(initialHealth, healthComponent.currentHealth, "Negative damage should not reduce health.");
-    }
+            // Act
+            _health.TakeDamage(150); // Fatal damage
 
-    [Test]
-    public void TakeDamage_PositiveDamage_ReducesHealth()
-    {
-        // Arrange
-        int initialHealth = 100;
-        healthComponent!.maxHealth = initialHealth;
-        healthComponent.currentHealth = initialHealth;
+            // Assert
+            Assert.That(_health.currentHealth, Is.EqualTo(0), "Health should not go below 0");
+            Assert.That(onDeathFired, Is.True, "OnDeath event should be fired when health reaches 0");
+        }
 
-        // Act
-        healthComponent.TakeDamage(20);
+        [Test]
+        public void TakeDamage_WithNonFatalDamage_ReducesHealth()
+        {
+            // Arrange
+            _health.currentHealth = 100;
 
-        // Assert
-        Assert.AreEqual(80, healthComponent.currentHealth, "Positive damage should reduce health.");
-    }
+            // Act
+            _health.TakeDamage(25);
 
-    [Test]
-    public void TakeDamage_MoreDamageThanCurrentHealth_SetsHealthToZero()
-    {
-        // Arrange
-        int initialHealth = 100;
-        healthComponent!.maxHealth = initialHealth;
-        healthComponent.currentHealth = initialHealth;
+            // Assert
+            Assert.That(_health.currentHealth, Is.EqualTo(75));
+        }
 
-        // Act
-        healthComponent.TakeDamage(150);
+        [Test]
+        public void TakeDamage_NegativeDamage_DoesNothing()
+        {
+            // Arrange
+            _health.currentHealth = 100;
 
-        // Assert
-        Assert.AreEqual(0, healthComponent.currentHealth, "Damage exceeding current health should set health to 0.");
+            // Act
+            _health.TakeDamage(-10);
+
+            // Assert
+            Assert.That(_health.currentHealth, Is.EqualTo(100));
+        }
     }
 }
