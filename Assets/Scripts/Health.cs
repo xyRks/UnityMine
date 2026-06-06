@@ -90,8 +90,5 @@ public class Health : MonoBehaviour
     {
         isDead = true;
         OnDeath?.Invoke();
-
-        // Логика уничтожения объекта
-        if (gameObject != null) Destroy(gameObject);
     }
 }
