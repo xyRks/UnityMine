@@ -2,6 +2,12 @@ using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
+/// Класс для события изменения здоровья
+/// </summary>
+[System.Serializable]
+public class HealthChangedEvent : UnityEvent<int, int> { }
+
+/// <summary>
 /// Универсальный компонент здоровья для Игрока и Врагов.
 /// Только отслеживание HP, без брони и прокачки.
 /// При изменении здоровья вызывает OnHealthChanged, при смерти - OnDeath.
@@ -15,18 +21,27 @@ public class Health : MonoBehaviour
     public int currentHealth;
 
     [Tooltip("Событие при изменении здоровья: передает (текущее, максимальное)")]
-    public UnityEvent<int, int> OnHealthChanged;
+    public HealthChangedEvent OnHealthChanged = new HealthChangedEvent();
 
     [Tooltip("Событие при смерти (текущее здоровье <= 0)")]
-    public UnityEvent OnDeath;
+    public UnityEvent OnDeath = new UnityEvent();
 
     private bool isDead = false;
 
     private void Start()
     {
-        // Инициализация здоровья при старте
-        currentHealth = maxHealth;
+        // Инициализация здоровья при старте, если оно не было задано
+        if (currentHealth <= 0)
+        {
+            currentHealth = maxHealth;
+        }
+
         OnHealthChanged?.Invoke(currentHealth, maxHealth);
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
     }
 
     /// <summary>
