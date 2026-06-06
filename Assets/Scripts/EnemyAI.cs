@@ -13,6 +13,7 @@ public class EnemyAI : MonoBehaviour
 
     private NavMeshAgent agent; // Компонент навигации
     private float nextAttackTime = 0f; // Таймер следующей атаки
+    private Health playerHealth; // Кэшированный компонент здоровья игрока
 
     private void Start()
     {
@@ -27,6 +28,12 @@ public class EnemyAI : MonoBehaviour
             {
                 player = playerObj.transform;
             }
+        }
+
+        // Кэшируем компонент здоровья игрока
+        if (player != null)
+        {
+            playerHealth = player.GetComponent<Health>();
         }
     }
 
@@ -61,8 +68,7 @@ public class EnemyAI : MonoBehaviour
             // Обновляем время следующей возможной атаки
             nextAttackTime = Time.time + attackCooldown;
 
-            // Пытаемся найти компонент Health у игрока
-            Health playerHealth = player.GetComponent<Health>();
+            // Используем кэшированный компонент Health
             if (playerHealth != null)
             {
                 // Наносим урон игроку
