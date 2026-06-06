@@ -36,7 +36,11 @@ public class Health : MonoBehaviour
             currentHealth = maxHealth;
         }
 
-        OnHealthChanged?.Invoke(currentHealth, maxHealth);
+        // Проверка на null добавлена для безопасности
+        if (OnHealthChanged != null)
+        {
+            OnHealthChanged.Invoke(currentHealth, maxHealth);
+        }
 
         if (currentHealth <= 0)
         {
@@ -58,7 +62,10 @@ public class Health : MonoBehaviour
             currentHealth = 0;
         }
 
-        OnHealthChanged?.Invoke(currentHealth, maxHealth);
+        if (OnHealthChanged != null)
+        {
+            OnHealthChanged.Invoke(currentHealth, maxHealth);
+        }
 
         if (currentHealth == 0)
         {
@@ -80,7 +87,10 @@ public class Health : MonoBehaviour
             currentHealth = maxHealth;
         }
 
-        OnHealthChanged?.Invoke(currentHealth, maxHealth);
+        if (OnHealthChanged != null)
+        {
+            OnHealthChanged.Invoke(currentHealth, maxHealth);
+        }
     }
 
     /// <summary>
@@ -90,7 +100,11 @@ public class Health : MonoBehaviour
     {
         if (isDead) return;
         isDead = true;
-        OnDeath?.Invoke();
+
+        if (OnDeath != null)
+        {
+            OnDeath.Invoke();
+        }
 
         // Логика уничтожения объекта
         Destroy(gameObject);

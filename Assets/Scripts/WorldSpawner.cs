@@ -47,15 +47,25 @@ public class WorldSpawner : MonoBehaviour
 
                 // Определение высоты Y с помощью закэшированного террейна
                 float y = 0f;
+                // Внедрена строгая Null-Safety для террейна
                 if (currentTerrain != null)
                 {
                     y = currentTerrain.SampleHeight(new Vector3(x, 0, z));
                 }
+                else
+                {
+                     // Fallback, если террейна нет, можно спавнить на высоте 0 или вывести предупреждение
+                     Debug.LogWarning("WorldSpawner: Terrain.activeTerrain не найден. Объекты будут созданы на высоте Y=0.");
+                }
 
                 Vector3 spawnPosition = new Vector3(x, y, z);
 
-                // Создание объекта
-                Instantiate(prefabToSpawn, spawnPosition, Quaternion.identity);
+                // Создание объекта, проверка Instantiate на null (хотя для GameObject это редкость, но требуется по ТЗ)
+                GameObject spawnedObject = Instantiate(prefabToSpawn, spawnPosition, Quaternion.identity);
+                if (spawnedObject == null)
+                {
+                     Debug.LogError("WorldSpawner: Ошибка при создании объекта.");
+                }
             }
         }
     }
